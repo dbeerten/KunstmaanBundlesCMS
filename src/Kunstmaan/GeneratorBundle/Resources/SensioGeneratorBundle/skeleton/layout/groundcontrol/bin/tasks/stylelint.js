@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import stylelintPlugin from 'stylelint';
 import reporter from 'postcss-reporter';
 import postcss from 'gulp-postcss';
+import scssSyntax from 'postcss-scss';
 
 export default function createStylelintTask({src = undefined}) {
     return function stylelint() {
@@ -9,6 +10,8 @@ export default function createStylelintTask({src = undefined}) {
             .pipe(postcss([
                 stylelintPlugin(),
                 reporter({clearReportedMessages: true})
-            ], {syntax: require('postcss-scss')}));
+            ], {
+                syntax: scssSyntax
+            }));
     };
 }

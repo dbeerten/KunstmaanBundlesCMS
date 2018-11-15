@@ -2,23 +2,23 @@ import gulp from 'gulp';
 import livingcss from 'gulp-livingcss';
 import path from 'path';
 
-export default function createStyleguideTask({src = undefined, dest = undefined, template = undefined, sortOrder = undefined, partials = undefined}) {
+export default function createStyleguideTask({
+    src = undefined,
+    dest = undefined,
+    template = undefined,
+    sortOrder = undefined,
+    partials = undefined
+}) {
     return function styleguide() {
         return gulp.src(src)
             .pipe(livingcss(dest, {
                 template,
                 sortOrder,
-                preprocess (context, tmpl, Handlebars) {
-                    Handlebars.registerHelper('json', function(data) {
-                        return JSON.stringify(data);
-                    });
+                preprocess(context, tmpl, Handlebars) {
+                    Handlebars.registerHelper('json', (data) => JSON.stringify(data));
+                    Handlebars.registerHelper('clean', (data) => data.replace(/(\\|%5[cC])/g, ''));
 
-                    Handlebars.registerHelper('clean', function(data) {
-                        return data.replace(/(\\|%5[cC])/g, '');
-                    });
-
-                    return livingcss.utils.readFileGlobs(partials, function(data, file) {
-
+                    return livingcss.utils.readFileGlobs(partials, (data, file) => {
                         // make the name of the partial the name of the file
                         const partialName = path.basename(file, path.extname(file));
                         Handlebars.registerPartial(partialName, data);
@@ -46,18 +46,13 @@ export default function createStyleguideTask({src = undefined, dest = undefined,
                             }
                         });
 
-                        Handlebars.registerHelper('counter', function(index) {
-                            return index + 1;
-                        });
-
-                        Handlebars.registerHelper('version', function(filename) {
-                            return `${filename}?${Date.now()}`;
-                        });
+                        Handlebars.registerHelper('counter', (index) => index + 1);
+                        Handlebars.registerHelper('version', (filename) => `${filename}?${Date.now()}`);
 
                     });
                 },
                 tags: {
-                    color: function() {
+                    color() {
                         const matches = (this.tag.description).match(/\[(.*?)\]/);
 
                         if (matches) {

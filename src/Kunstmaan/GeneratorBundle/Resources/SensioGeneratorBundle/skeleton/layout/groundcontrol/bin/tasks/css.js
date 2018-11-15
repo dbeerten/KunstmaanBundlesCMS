@@ -3,7 +3,6 @@ import sass from 'gulp-sass';
 import notifier from 'node-notifier';
 import sourcemaps from 'gulp-sourcemaps';
 import postcss from 'gulp-postcss';
-import rev from 'gulp-rev';
 import cssnano from 'cssnano';
 import autoprefixer from 'autoprefixer';
 
@@ -23,7 +22,6 @@ export function createCssOptimizedTask({src = undefined, dest = undefined, cssna
         return gulp.src(src)
             .pipe(sass().on('error', sassErrorHandler))
             .pipe(postcss([autoprefixer(), cssnano(cssnanoConfig)]))
-            //.pipe(rev())
             .pipe(gulp.dest(dest));
     };
 }

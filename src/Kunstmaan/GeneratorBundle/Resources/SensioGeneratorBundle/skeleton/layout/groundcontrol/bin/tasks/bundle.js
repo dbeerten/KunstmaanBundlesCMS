@@ -14,7 +14,7 @@ export default function createBundleTask({config = undefined, watch = false, log
         } else {
             compiler.run(handleWebpackResult);
         }
-        
+
         function handleWebpackResult(err, stats) {
             if (err) {
                 console.error(err.stack || err);

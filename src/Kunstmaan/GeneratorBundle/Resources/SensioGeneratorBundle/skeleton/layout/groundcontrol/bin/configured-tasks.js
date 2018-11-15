@@ -1,7 +1,4 @@
-/* eslint-env node */
-
 import gulp from 'gulp';
-import webpack from 'webpack';
 
 import consoleArguments from './console-arguments';
 
@@ -34,9 +31,15 @@ export const copy = gulp.parallel(
     createCopyTask({src: ['./src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/fonts/**'], dest: './web/frontend/fonts'})
 );
 
-export const cssLocal = createCssLocalTask({src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/scss/style.scss', dest: './web/frontend/css'});
+export const cssLocal = createCssLocalTask({
+    src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/scss/style.scss',
+    dest: './web/frontend/css'
+});
 
-export const cssOptimized = createCssOptimizedTask({src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/scss/*.scss', dest: './web/frontend/css'});
+export const cssOptimized = createCssOptimizedTask({
+    src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/scss/*.scss',
+    dest: './web/frontend/css'
+});
 
 export const bundleLocal = createBundleTask({
     config: webpackConfigApp(consoleArguments.speedupLocalDevelopment)
@@ -97,7 +100,10 @@ export const generateStyleguide = createStyleguideTask({
     ]
 });
 
-export const cssStyleguideOptimized = createCssOptimizedTask({src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/styleguide/scss/*.scss', dest: './web/frontend/styleguide/css'});
+export const cssStyleguideOptimized = createCssOptimizedTask({
+    src: './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/styleguide/scss/*.scss',
+    dest: './web/frontend/styleguide/css'
+});
 
 export const bundleStyleguideOptimized = createBundleTask({
     config: webpackConfigStyleguide(consoleArguments.speedupLocalDevelopment, true)

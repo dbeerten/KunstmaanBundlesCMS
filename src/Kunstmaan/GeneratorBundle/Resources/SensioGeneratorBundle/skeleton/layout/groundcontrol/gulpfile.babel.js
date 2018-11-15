@@ -75,16 +75,14 @@ const startOptimized = gulp.series(
 );
 
 const buildCmsAssets = gulp.series(
-    () => {
-        return gulp.src('vendor/kunstmaan/bundles-cms/gulpfile.babel.js', { read: false })
+    () => gulp.src('vendor/kunstmaan/bundles-cms/gulpfile.babel.js', { read: false })
             .pipe(chug({
                 args: [
                     '--rootPath',
                     '../../../../../../../web/assets/'
                 ],
                 tasks: ['buildOptimized']
-            }));
-    }
-);
+            }))
+)
 
 export {test, buildOptimized, testAndBuildOptimized, startLocal, startOptimized, buildCmsAssets};

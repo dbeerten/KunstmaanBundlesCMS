@@ -1,12 +1,14 @@
-import defaultConfig from './webpack.config.default';
-import webpack from 'webpack';
+import path from 'path';
+import defaultConfig from './webpack.config.default';{% if demosite %}
+import webpack from 'webpack';{% endif %}
 
-export default function config(speedupLocalDevelopment, optimize = false) {
+export default function webpackConfigApp(speedupLocalDevelopment, optimize = false) {
     const config = defaultConfig(speedupLocalDevelopment, optimize);
 
     config.entry = './src/{{ bundle.namespace|replace({'\\':'/'}) }}/Resources/ui/js/app.js';
     config.output = {
-        filename: './web/frontend/js/bundle.js'
+        path: path.resolve(__dirname, '../../web/frontend/js'),
+        filename: 'bundle.js'
     };
 {% if demosite %}
     config.module.rules = config.module.rules.concat([

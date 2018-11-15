@@ -1,5 +1,3 @@
-import webpack from 'webpack';
-
 function getBabelLoaderOptions({optimize = false, transpileOnlyForLastChromes = false}) {
     if (optimize || !transpileOnlyForLastChromes) {
         return {
@@ -26,27 +24,26 @@ function getBabelLoaderOptions({optimize = false, transpileOnlyForLastChromes = 
     };
 }
 
-export default function config(speedupLocalDevelopment, optimize = false) {
+export default function defaultConfig(speedupLocalDevelopment, optimize = false) {
     const config = {
+        mode: optimize ? 'production' : 'development',
         devtool: optimize ? 'source-map' : 'cheap-module-source-map',
         module: {
             rules: [
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
-                    loader: 'babel-loader',
-                    query: getBabelLoaderOptions({
-                        transpileOnlyForLastChromes: speedupLocalDevelopment
-                    })
+                    use: {
+                        loader: 'babel-loader',
+                        options: getBabelLoaderOptions({
+                            transpileOnlyForLastChromes: speedupLocalDevelopment
+                        })
+                    }
                 }
             ]
         },
         plugins: []
     };
-
-    if (optimize) {
-        config.plugins.push(new webpack.optimize.UglifyJsPlugin({mangle: true, sourceMap: true}));
-    }
 
     return config;
 };
