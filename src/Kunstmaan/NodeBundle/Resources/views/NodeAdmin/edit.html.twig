@@ -36,7 +36,7 @@
 
 
 {% block header %}
-    <!-- PageClassName: {{ node.refEntityName }} -->
+    {#<!-- PageClassName: {{ node.refEntityName }} -->
     <h1 class="app__content__header__title">
         {% if is_granted('ROLE_SUPER_ADMIN') %}
             <abbr title="{{ node.refEntityName }}">{{ page.title }}</abbr>
@@ -72,7 +72,7 @@
                 {% endif %}
             </small>
         {% endif %}
-    </h1>
+    </h1>#}
 {% endblock %}
 
 
@@ -89,7 +89,31 @@
         </div>
     {% endif %}
 
-    {{ form_start(form, {'method': 'POST', 'action': path('KunstmaanNodeBundle_nodes_edit', { 'id': node.id, 'subaction': subaction }), 'attr': {'novalidate': 'novalidate', 'id': 'pageadminform', 'class': 'form'}}) }}
+    {% set initTitle = nodeTranslation.title %}
+    <div style="display: flex;width:100%;height:calc(100vh - 95px);">
+        <div style="flex: 1 1 40%;padding-top:50px;">
+            <input name="preview_url" type="hidden" value="https:{{ app.request.schemeAndHttpHost }}{{ path('_slug', { 'url': nodeTranslation.url}) }}"/>
+            <div class="form-group">
+                <label class="required" for="title">
+                    Title
+                </label>
+                <input type="text" id="title" name="title" required="required" class="form-control" value="{{ initTitle }}" />
+            </div>
+            <div class="form-group">
+                <button id="update-live-preview" class="btn btn-primary" type="button">Update preview</button>
+            </div>
+        </div>
+        <div style="display: flex;flex: 1 1 60%">
+            <iframe
+                id="iframe-live-preview"
+                src="{{ app.request.schemeAndHttpHost }}{{ path('_slug', { 'url': nodeTranslation.url, 'title': initTitle }) }}"
+                width="100%"
+                style="border: 2px solid black;"
+            ></iframe>
+        </div>
+    </div>
+
+    {#{{ form_start(form, {'method': 'POST', 'action': path('KunstmaanNodeBundle_nodes_edit', { 'id': node.id, 'subaction': subaction }), 'attr': {'novalidate': 'novalidate', 'id': 'pageadminform', 'class': 'form'}}) }}
 
         {{ knp_menu_render('sub_actions', { 'template': '@KunstmaanNode/Menu/knp_menu_actions.html.twig'}) }}
         {{ knp_menu_render('actions', { 'template': '@KunstmaanNode/Menu/knp_menu_actions.html.twig'}) }}
@@ -104,18 +128,18 @@
 
     {{ form_end(form) }}
 
-    {% include '@KunstmaanNode/NodeAdmin/_modals.html.twig' %}
+    {% include '@KunstmaanNode/NodeAdmin/_modals.html.twig' %}#}
 {% endblock %}
 
 {% block breadcrumb %}
-
+{#
     {% if getOverviewRoute(page) is not null %}
         <a href="{{ path(getOverviewRoute(page)) }}" class="btn btn-default" style="margin:20px 0 20px 0;"><i class="fa fa-arrow-left"></i>
             Back to overview
         </a>
     {% else %}
         {{ parent() }}
-    {%  endif %}
+    {%  endif %}#}
 
 {% endblock %}
 

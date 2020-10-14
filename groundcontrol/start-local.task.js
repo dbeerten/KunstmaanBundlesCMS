@@ -51,7 +51,10 @@ const startLocalTask = createServerTask({
         reloadOnRestart: true,
         notify: true,
         proxy: { target: consoleArguments.backendProxy },
-        middleware: BUNDLES.map(bundle => { return { route: bundle.config.publicPath, handle: handleRequest } })
+        middleware: BUNDLES.map(bundle => { return { route: bundle.config.publicPath, handle: handleRequest } }),
+        files: [
+            `${adminBundle.config.distPath}/**/*`
+        ]
     }
 });
 

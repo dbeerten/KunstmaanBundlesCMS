@@ -70,6 +70,7 @@
     "jquery": "^3.5.1",
     "jquery.typewatch": "^3.0.0",
     "jstree": "^3.3.3",
+    "lodash": "^4.17.20",
     "picturefill": "^3.0.2",
     "plupload": "^2.3.6",
     "select2": "^4.0.3",
