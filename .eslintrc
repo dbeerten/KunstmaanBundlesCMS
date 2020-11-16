@@ -2,10 +2,12 @@
   "root": true,
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jquery": true
   },
   "globals": {
-    "dataLayer": "readonly"
+    "dataLayer": "readonly",
+    "CKEDITOR": "readonly"
   },
   "extends": ["./node_modules/@kunstmaan/eslint-config/index.js"],
   "rules": {

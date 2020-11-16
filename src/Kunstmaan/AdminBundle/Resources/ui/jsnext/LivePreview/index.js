@@ -1,39 +1,67 @@
 import debounce from 'lodash/debounce';
 
-let updateButton;
-let titleInput;
+const FORM_ID = 'pageadminform';
+const URL_INPUT_NAME = 'preview_url';
+const IFRAME_ID = 'iframe-live-preview';
+
 let urlInput;
-let iframe;
 
 function init() {
-    updateButton = document.getElementById('update-live-preview');
-    titleInput = document.querySelector('input[name=title]');
-    urlInput = document.querySelector('input[name=preview_url]');
-    iframe = document.getElementById('iframe-live-preview');
+    const form = document.getElementById(FORM_ID);
 
-    if (updateButton) {
-        updateButton.addEventListener('click', handleLivePreview);
-    }
+    if (form) {
+        const inputs = [...form.querySelectorAll('input, textarea')];
+        urlInput = document.querySelector(`input[name=${URL_INPUT_NAME}]`);
 
-    if (titleInput) {
-        titleInput.addEventListener('input', debounce(handleLivePreview, 500));
+        // Wait for window to load to add event listeners to CKEditors
+        window.onload = () => {
+            Object.keys(CKEDITOR.instances).forEach((instanceName) => {
+                const instance = CKEDITOR.instances[instanceName];
+                if (instance) {
+                    instance.on('change', debounce(() => {
+                        instance.updateElement();
+                        handleLivePreview();
+                    }, 500));
+                }
+            });
+        };
+
+        // Add eventlistener to each input
+        inputs.forEach((input) => {
+            input.addEventListener('input', debounce(handleLivePreview, 500));
+        });
     }
 }
 
 function handleLivePreview() {
-    if (titleInput && urlInput) {
-        const newUrl = new URL(urlInput.value);
-        newUrl.searchParams.append('title', titleInput.value);
+    const form = document.getElementById(FORM_ID);
+    const formData = new FormData(form);
+    const iframe = document.getElementById(IFRAME_ID);
 
-        fetch(newUrl.href)
+    if (urlInput && urlInput.value && iframe) {
+        fetch(urlInput.value, {
+            method: 'POST',
+            body: formData,
+        })
             .then((response) => response.text())
             .then((data) => {
-                iframe.contentDocument.open();
-                iframe.contentDocument.write(data);
-                iframe.contentDocument.close();
+                const newDoc = document.createElement('html');
+                newDoc.innerHTML = data;
+                const bodyNewDoc = newDoc.getElementsByTagName('body')[0];
+
+                // Replace only the body of the iframe
+                iframe.contentWindow.document.body.parentNode.replaceChild(
+                    bodyNewDoc,
+                    iframe.contentWindow.document.body,
+                );
+
+                // TODO: check performance of both ways to replace content of iframe
+                // Another way to update iframe content
+                // iframe.contentDocument.open();
+                // iframe.contentDocument.write(data);
+                // iframe.contentDocument.close();
             });
     }
 }
 
-export default {init};
-
+export default { init };
