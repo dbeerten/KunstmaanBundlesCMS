@@ -96,7 +96,7 @@
         {{ knp_menu_render('top_actions', { 'template': '@KunstmaanNode/Menu/knp_menu_top_actions.html.twig'}) }}
 
         {% set initTitle = nodeTranslation.title %}
-        <div style="display: flex;width:100%;height:calc(100vh - 95px);">
+        <div style="display: flex;width:100%;height:calc(100vh - 125px);">
             <div style="flex: 1 1 40%;overflow:auto;padding-right: 15px">
                 {# <input name="preview_url" type="hidden" value="{{ app.request.schemeAndHttpHost }}{{ path('_slug', { 'url': nodeTranslation.url}) }}"/> #}
                 <input name="preview_url" type="hidden" value="{{ path('KunstmaanNodeBundle_auto_save_node_verison', { 'id': node.id }) }}"/>
